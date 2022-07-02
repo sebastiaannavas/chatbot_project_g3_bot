@@ -4,7 +4,7 @@
   "description": "",
   "main": "electro-mart.js",
   "scripts": {
-    "start": "node main"
+    "start": "node main.js"
   },
   "keywords": [],
   "author": "",
