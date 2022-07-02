@@ -2,9 +2,9 @@
   "name": "chatbot_project_g3_bot",
   "version": "1.0.0",
   "description": "",
-  "main": "electro-mart.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node main.js"
+    "start": "node electro-mart.js"
   },
   "keywords": [],
   "author": "",
