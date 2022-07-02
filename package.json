@@ -1,0 +1,23 @@
+{
+  "name": "chatbot_project_g3_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node electro-mart.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "mongodb": "^4.7.0",
+    "nodemailer": "^6.7.6",
+    "telebot": "^1.4.1",
+    "translate-google": "^1.5.0",
+    "yup": "^0.32.11"
+  },
+  "engines": {
+    "node": ">=0.10.3 <15"
+  }
+}
