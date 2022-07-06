@@ -58,8 +58,7 @@ bot.on('/products', (msg) => {
     async function getProducts() {
         try {
 
-            let call = await API_DATABASE
-            .get("https://62bfacf716537f6573afd4e0--luminous-crisp-2d239d.netlify.app/adminDB");
+            let call = await API_DATABASE.get("http://localhost:8888/adminDB"); //NOTA: CAMBIAR DIRECCIÓN
 
             let producto = call.data;
             let len = producto.length;
@@ -281,26 +280,28 @@ bot.on('ask.mod', (msg) => {
 
 bot.on('/registrar', (msg) => {
 
-    return translateMessage(msg, lang, `
-    Ingresa tus datos siguiendo el formato a continuación:
-    Correo,Nombre,Apellido,Ciudad,Método de Pago
+     translateMessage(msg, lang, `
+     Ingresa tus datos siguiendo el formato a continuación:
+     Correo,Nombre,Apellido,Ciudad,Método de Pago
 
-    Ejemplo: ernestodelacruz@gmail.com,Ernesto,De la Cruz,Maracaibo,Efectivo
+     Ejemplo: ernestodelacruz@gmail.com,Ernesto,De la Cruz,Maracaibo,Efectivo
 
-    ■ MÉTODOS DE PAGO 💸\n
-    • Efectivo 
-    • Transferencia 
-    • Crypto:
-        
-        
-    ■ Zonas de Entrega 🗺️\n
-    • Maracaibo 
-    • Caracas 
-    • Valencia
-    • Maracay
-    
-    NOTA: NO AÑADIR ESPACIOS ENTRE LOS CAMPOS 😜`,
-    false, 'datos')
+     ■ MÉTODOS DE PAGO 💸\n
+     • Efectivo 
+     • Transferencia 
+     • BTC
+     • ETH
+     • USDT
+         
+         
+     ■ Zonas de Entrega 🗺️\n
+     • Maracaibo 
+     • Caracas 
+     • Valencia
+     • Maracay
+     
+     NOTA: NO AÑADIR ESPACIOS ENTRE LOS CAMPOS 😜`,
+     false, 'datos')
 
 })
 
@@ -395,9 +396,22 @@ bot.on('/verCarrito', (msg) => {
 
 bot.on('/factura', (msg) => {
 
+    async function verify () {
 
-    let replyMarkup = bot.keyboard([[BUTTONS.registrar.label]], { resize: true });
-    translateMessage(msg, lang, 'Presione el botón y siga los pasos indicados: ', replyMarkup);
+        let call = await API_DATABASE.get(ENDPOINT_DATABASE.showCart + `?id=${msg.from.id}` );
+        let resultado = call.data;
+
+        if(resultado=='No se han añadido productos al carrito'){
+          return  translateMessage(msg,lang,`⚠️ Error creando factura: No se han añadido productos al carrito`)
+        } else {
+            let replyMarkup = bot.keyboard([[BUTTONS.registrar.label]], { resize: true });
+            translateMessage(msg, lang, 'Presione el botón y siga los pasos indicados: ', replyMarkup);
+        }
+
+    }
+    
+    verify();
+    
 
 })
 
@@ -405,9 +419,10 @@ bot.on('/enviarFactura', (msg) => {
 
     async function enviar() {
         try {
-
-            let call = await API_DATABASE.post(ENDPOINT_DATABASE.sendMail + `?id=${msg.from.id}`)
-            let resultado = call.data;
+            let callTicket = await API_DATABASE.post(ENDPOINT_DATABASE.createTicket + `?id=${msg.from.id}`)
+            let callMail = await API_DATABASE.post(ENDPOINT_DATABASE.sendMail + `?id=${msg.from.id}`)
+            bot.sendMessage(-699727829, callTicket.data)
+            let resultado=callMail.data;
             translateMessage(msg, lang, resultado);
         } catch (error) { log(error) }
     }
@@ -432,6 +447,18 @@ bot.on('/vaciarCarrito', (msg) => {
     }
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
 
 // START POLLING UPDATES
 
