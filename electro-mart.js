@@ -12,8 +12,6 @@ bot.on('/start', (msg) => {
         catch (Error) { console.log(Error) }
     }
 
-
-
     async function verificando() {
 
         try {
@@ -60,7 +58,9 @@ bot.on('/products', (msg) => {
     async function getProducts() {
         try {
 
-            let call = await API_DATABASE.get("http://localhost:8888/adminDB")
+            let call = await API_DATABASE
+            .get("https://62bfacf716537f6573afd4e0--luminous-crisp-2d239d.netlify.app/adminDB");
+
             let producto = call.data;
             let len = producto.length;
 
@@ -95,36 +95,31 @@ bot.on('/buscar', (msg) => {
 
 // SELECT PRODUCT
 bot.on('ask.id', msg => {
-    const id = Number(msg.text);
+        const id = Number(msg.text);
 
-    if (!id || id <= 0 || id > 20) {
-        return translateMessage(msg, lang, 'Introduzca un id valido. Ej: 2', false, 'id');
+        if (!id || id <= 0 || id > 20) {
+            return translateMessage(msg, lang, 'Introduzca un id valido. Ej: 2', false, 'id');
+
+        }
+
+        async function getProductID(id) {
+
+            let call = await API_DATABASE.get(ENDPOINT_DATABASE.getProducts + `?id=${id}`)
+            let producto = call.data;
+
+            let resultado = `id: ${producto[0].id}\n Nombre: ${producto[0].name}\n 
+            Precio: $${producto[0].price} \n Descripcion: \n ${producto[0].description} \n ${producto[0].image} \n
+            Categoria: ${producto[0].category}\n
+            Valoracion: promedio ${producto[0].rating.rate} de ${producto[0].rating.count} valoraciones \n`;
+
+            bot.sendMessage(msg.chat.id, `${resultado}`);
+        }
+
+        getProductID(id)
+
+        return translateMessage(msg, lang, 'Aqui se encuentra el producto solicitado ✅');
 
     }
-
-    async function getProductID(id) {
-
-        let call = await API_DATABASE.get(ENDPOINT_DATABASE.getProducts + `?id=${id}`)
-        let producto = call.data;
-
-        let resultado = `id: ${producto[0].id}\n Nombre: ${producto[0].name}\n 
-        Precio: $${producto[0].price} \n Descripcion: \n ${producto[0].description} \n ${producto[0].image} \n
-        Categoria: ${producto[0].category}\n
-        Valoracion: promedio ${producto[0].rating.rate} de ${producto[0].rating.count} valoraciones \n`;
-
-        bot.sendMessage(msg.chat.id, `${resultado}`);
-    }
-
-    getProductID(id)
-
-    return translateMessage(msg, lang, 'Aqui se encuentra el producto solicitado ✅');
-
-
-
-}
-
-
-
 );
 
 
@@ -172,7 +167,6 @@ bot.on('/opciones', (msg) => {
     ], { resize: true });
     translateMessage(msg, lang, 'Presione la opción deseada: ⌨️', replyMarkup);
 
-
 });
 
 
@@ -188,7 +182,6 @@ bot.on('/addToCart', (msg) => {
     NOTA: Los productos ingresados tomarán en cuenta a los añadidos previamente: Si en el carrito tenías 1 producto ID 1 con el mensaje ejemplo pasarás a tener 3.
     `, false, 'prod')
 
-
 });
 
 
@@ -203,7 +196,6 @@ bot.on('/modCart', (msg) => {
 
     NOTA: Los productos ingresados sustituirán a los añadidos previamente: Si en el carrito tenías 1 producto ID 1 con el mensaje ejemplo pasarás a tener 2.
     `, false, 'mod')
-
 
 });
 
@@ -247,8 +239,6 @@ bot.on('ask.prod', (msg) => {
 
 });
 
-
-
 bot.on('ask.mod', (msg) => {
 
     let text = `
@@ -286,12 +276,10 @@ bot.on('ask.mod', (msg) => {
     addItems();
     return translateMessage(msg, lang, 'Carrito modificado satisfactoriamente ✅');
 
-
 });
 
 
 bot.on('/registrar', (msg) => {
-
 
     return translateMessage(msg, lang, `
     Ingresa tus datos siguiendo el formato a continuación:
@@ -313,7 +301,6 @@ bot.on('/registrar', (msg) => {
     
     NOTA: NO AÑADIR ESPACIOS ENTRE LOS CAMPOS 😜`,
     false, 'datos')
-
 
 })
 
@@ -358,9 +345,7 @@ bot.on('ask.datos', msg => {
     }
     revisa();
 
-
 })
-
 
 
 bot.on('/carrito', (msg) => {
@@ -390,7 +375,6 @@ bot.on('/carrito', (msg) => {
 
 bot.on('/verCarrito', (msg) => {
 
-
     registro();
     translateMessage(msg, lang, 'Carrito de compras actual:')
 
@@ -406,9 +390,7 @@ bot.on('/verCarrito', (msg) => {
         }
         catch (Error) { console.log(Error) }
     }
-
 })
-
 
 
 bot.on('/factura', (msg) => {
@@ -434,13 +416,9 @@ bot.on('/enviarFactura', (msg) => {
 })
 
 
-
-
 bot.on('/vaciarCarrito', (msg) => {
 
-
     vaciar();
-
 
     async function vaciar() {
         try {
@@ -453,7 +431,8 @@ bot.on('/vaciarCarrito', (msg) => {
         catch (Error) { console.log(Error) }
     }
 
-})
+});
+
 // START POLLING UPDATES
 
 bot.start(); // also bot.connect()

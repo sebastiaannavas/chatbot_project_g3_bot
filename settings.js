@@ -3,9 +3,8 @@
 const Telebot = require('telebot');
 const axios = require('axios');
 const translate = require('translate-google');
-let connectDB = require('./functions/connectDB/connectDB');
 let yup = require("yup");
-let nodeMailer = require("nodemailer")
+
 // INITIAL LANGUAGE
 
 let lang = 'es';
@@ -51,7 +50,7 @@ const bot = new Telebot({
 const API_DATABASE = axios.create({
     baseURL: 'https://62bfacf716537f6573afd4e0--luminous-crisp-2d239d.netlify.app',
     timeout: 10000,
-  });
+});
 
 
 
@@ -73,17 +72,4 @@ const ENDPOINT_DATABASE = {
     sendMail:"/sendMail"
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = { axios, translate, Telebot, bot, lang, 
-                   BUTTONS, keys, labels, commands,  connectDB, API_DATABASE, ENDPOINT_DATABASE, yup, nodeMailer};
+module.exports = { translate, bot, lang, BUTTONS, keys, labels, API_DATABASE, ENDPOINT_DATABASE, yup };
