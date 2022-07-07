@@ -8,46 +8,37 @@ let metodos=["USDT", "BTC", "ETH", "Transferencia", "Efectivo"]
 function translateMessage (msg, lang, text, replyMarkup, id) {
    
     if(!replyMarkup){
-         if (!id){ 
-            
-            translate(text, {to: lang}).then(res => {
-            bot.sendMessage(msg.from.id, res  ) })
-            .catch(err => {
-                console.error(err)
 
-            });} else {
-                if(!replyMarkup){
+        if (!id){ 
+        
+            translate(text, {to: lang})
+            .then(res => { bot.sendMessage(msg.from.id, res) })
+            .catch(err => {console.error(err)});
 
-                   translate(text, {to: lang}).then(res => {
-                bot.sendMessage(msg.from.id, res, {ask: id}  ) })
-                .catch(err => {
-                console.error(err)})  
-                } else {
-                    translate(text, {to: lang}).then(res => {
-                        bot.sendMessage(msg.from.id, res, {replyMarkup}, {ask: id}  ) })
-                        .catch(err => {
-                        console.error(err)})  
+        } else {
 
-                }
-                      
-       
-        }} else {
-            
-            translate(text, {to: lang}).then(res => {
-                
-                bot.sendMessage(msg.from.id, res, { replyMarkup }  ) })
-                .catch(err => {
-                    console.error(err)
-                });
-                
-                
-            }
-            
+            translate(text, {to: lang})
+            .then(res => { bot.sendMessage(msg.from.id, res, {ask: id}) })
+            .catch(err => { console.error(err) } );  
         }
     
+    } else {
 
+        if (id){
 
+            translate(text, {to: lang})
+            .then(res => { bot.sendMessage(msg.from.id, res, { replyMarkup }, {ask: id} ) })
+            .catch(err => { console.error(err) }); 
 
+        } else {
+
+            translate(text, {to: lang})
+            .then(res => { bot.sendMessage(msg.from.id, res, { replyMarkup }  ) })
+            .catch(err => { console.error(err) });
+        } 
+    }    
+}
+    
 function translateBtn (lang) {
 
     let idx = 0, len = labels.length;
@@ -79,8 +70,8 @@ async function verifica_datos(lang,msg, datos) {
     const num = '0123456789';
     const symbols = '`~!@#$%^&*()_+{}|:"<>?-=[];,./';
     let val = [];
-    let datosLen=datos.length;
-    datos=datos.map(data => data.trim());
+    let datosLen = datos.length;
+    datos = datos.map(data => data.trim());
 
     let i = 0;
     for (; i < datosLen; i++){
@@ -99,6 +90,7 @@ async function verifica_datos(lang,msg, datos) {
         }
         else if (i == 1){                // Para verificar el nombre
             let name = datos[i];
+            name = `${name.charAt(0).toUpperCase()}${name.slice(1, name.length)}`;
             for (let j in name){
                 if (num.includes(name[j]) || symbols.includes(name[j])){
                     val.push(0);
@@ -111,6 +103,7 @@ async function verifica_datos(lang,msg, datos) {
         }
         else if (i == 2){           // Para verificar el apellido
             let lastname = datos[i];
+            lastname = `${lastname.charAt(0).toUpperCase()}${lastname.slice(1, lastname.length)}`;
             for (let j in lastname){
                 if (num.includes(lastname[j]) || symbols.includes(lastname[j])){
                     val.push(0);
@@ -123,6 +116,7 @@ async function verifica_datos(lang,msg, datos) {
         }
         else if(i==3){                       // Para verificar la ciudad
             let city = datos[i];
+            city = `${city.charAt(0).toUpperCase()}${city.slice(1, city.length)}`;
             
                 if (ciudad.includes(city)){
                     val.push(1);
@@ -136,6 +130,7 @@ async function verifica_datos(lang,msg, datos) {
         } else {        //Para verificar el método de pago
 
             let pago = datos[i];
+            pago = `${pago.charAt(0).toUpperCase()}${pago.slice(1, pago.length)}`;
             
                 if (metodos.includes(pago)){
                     val.push(1);
