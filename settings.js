@@ -49,7 +49,7 @@ const bot = new Telebot({
 //'https://62bfacf716537f6573afd4e0--luminous-crisp-2d239d.netlify.app'
 // Instancia Axios para la base de datos
 const API_DATABASE = axios.create({
-    baseURL: 'http://localhost:8888',   //NOTA: CAMBIAR DIRECCIÓN
+    baseURL: 'https://62bfacf716537f6573afd4e0--luminous-crisp-2d239d.netlify.app',   //NOTA: CAMBIAR DIRECCIÓN
     timeout: 10000,
 });
 
