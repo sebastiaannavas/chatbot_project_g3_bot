@@ -202,6 +202,8 @@ bot.on('/opciones', (msg) => {
     ], { resize: true });
     translateMessage(msg, lang, 'Presione la opción deseada: ⌨️', replyMarkup);
 
+
+
 });
 
 
@@ -243,7 +245,7 @@ bot.on('/modCart', (msg) => {
 
 bot.on('ask.prod', (msg) => {
     let mensaje = msg.text.toLowerCase();
-    mensaje.trim();
+    
 
     if(mensaje=='salir' || mensaje=='exit' ) {return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente')};   
 
@@ -291,7 +293,7 @@ bot.on('ask.mod', (msg) => {
 
 
     let mensaje = msg.text.toLowerCase();
-    mensaje.trim();
+    
 
     if(mensaje=='salir' || mensaje=='exit' ) {return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente')};   
 
@@ -370,9 +372,15 @@ bot.on('/registrar', (msg) => {
 bot.on('ask.datos', msg => {
 
     
-    let mensaje=msg.text;
-    mensaje.toLowerCase();
-    if(mensaje=='salir' || mensaje=='exit' ) {return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente')};   
+    let mensaje=msg.text.toLowerCase();
+   
+    if(mensaje=='salir' || mensaje=='exit' ) {
+        
+        let replyMarkup = bot.keyboard([
+            [BUTTONS.products.label, BUTTONS.carrito.label],
+            [BUTTONS.info.label, BUTTONS.opciones.label]
+        ], { resize: true });
+        return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente',replyMarkup)};   
 
     let replyMarkup = bot.keyboard([
         [BUTTONS.products.label, BUTTONS.buscar.label],
@@ -542,8 +550,8 @@ bot.on('/contraseña', (msg) => {
 bot.on('ask.contraseña', (msg) => {
    
     
-    let mensaje=msg.text;
-    mensaje.toLowerCase();
+    let mensaje=msg.text.toLowerCase();
+    
     if(mensaje=="salir" || mensaje=="exit") {return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');  }
    
     if(mensaje=="contraseña"){
@@ -581,19 +589,17 @@ global();
 
 bot.on('/valorar', (msg) => {
 
-    
-    let mensaje=msg.text;
-    mensaje.toLowerCase();
-    if(mensaje=="salir" || mensaje=="exit"){return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');  }
-    translateMessage(msg,lang,'Ingresa tu comentario: ', false , 'comentario')
+
+    translateMessage(msg,lang,'Ingresa tu comentario,crítica o consejo: ', false , 'comentario')
     
     }); 
 
-    bot.on('ask.comentario', (msg) => {
+//666240988
+bot.on('ask.comentario', (msg) => {
 
-        let mensaje=msg.text;
-        if(mensaje=="salir" || mensaje=="exit"){return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');  }      
-        bot.sendMessage(-699727829, mensaje);
+        let mensaje=msg.text.toLowerCase();
+        if(mensaje=="salir" || mensaje=="exit"){return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente', false);  }      
+        bot.sendMessage(-666240988, mensaje);
         }); 
     
 
