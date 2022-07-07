@@ -569,7 +569,6 @@ bot.on('ask.contraseña', (msg) => {
 bot.on('ask.mensaje', (msg) => {
 
 let mensaje=msg.text;
-mensaje.toLowerCase();
 if(mensaje=="salir" || mensaje=="exit"){return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');  }
 async function global() {
     try {
