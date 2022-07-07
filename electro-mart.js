@@ -371,7 +371,7 @@ bot.on('ask.datos', msg => {
 
     
     let mensaje=msg.text;
-
+    mensaje.toLowerCase();
     if(mensaje=='salir' || mensaje=='exit' ) {return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente')};   
 
     let replyMarkup = bot.keyboard([
@@ -583,6 +583,7 @@ bot.on('/valorar', (msg) => {
 
     
     let mensaje=msg.text;
+    mensaje.toLowerCase();
     if(mensaje=="salir" || mensaje=="exit"){return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');  }
     translateMessage(msg,lang,'Ingresa tu comentario: ', false , 'comentario')
     
