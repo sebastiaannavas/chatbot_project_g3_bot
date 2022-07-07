@@ -36,7 +36,7 @@ for (; idx < keysLen ; idx++) {
 
 const bot = new Telebot({
     //token: '5573269354:AAG0Z4nfZAvq-g41dtHavn0yDsTg5DYTtcM',
-    token: "5443657191:AAF7flC9AsW3rTeYN63RmZ6xg3DuUizzC7w",
+    token: "5388284212:AAHmEF3VaQ12caV7U1QhDwXD1jT19yEsqZw",
     usePlugins: ['namedButtons', 'askUser', 'commandButton'],
     pluginConfig: {
         namedButtons: {
