@@ -16,11 +16,20 @@ function translateMessage (msg, lang, text, replyMarkup, id) {
                 console.error(err)
 
             });} else {
-                
-                translate(text, {to: lang}).then(res => {
+                if(!replyMarkup){
+
+                   translate(text, {to: lang}).then(res => {
                 bot.sendMessage(msg.from.id, res, {ask: id}  ) })
                 .catch(err => {
-                console.error(err)})       
+                console.error(err)})  
+                } else {
+                    translate(text, {to: lang}).then(res => {
+                        bot.sendMessage(msg.from.id, res, {replyMarkup}, {ask: id}  ) })
+                        .catch(err => {
+                        console.error(err)})  
+
+                }
+                      
        
         }} else {
             

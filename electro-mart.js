@@ -58,7 +58,7 @@ bot.on('/products', (msg) => {
     async function getProducts() {
         try {
 
-            let call = await API_DATABASE.get("http://localhost:8888/adminDB"); //NOTA: CAMBIAR DIRECCIÓN
+            let call = await API_DATABASE.get(ENDPOINT_DATABASE.adminDB); //NOTA: CAMBIAR DIRECCIÓN
 
             let producto = call.data;
             let len = producto.length;
@@ -88,7 +88,9 @@ bot.on('/products', (msg) => {
 
 //  SEARCH PRODUCT
 bot.on('/buscar', (msg) => {
-    return translateMessage(msg, lang, 'A continuacion introduzca el id del producto que desea consultar:\nEjemplo: 2', false, 'id');
+    const replyMarkupInline = bot.inlineKeyboard([[bot.inlineButton('CANCELAR', { callback: '/cancelarProd' })]]);
+
+    return translateMessage(msg, lang, 'A continuacion introduzca el id del producto que desea consultar:\nEjemplo: 2', replyMarkupInline, 'id');
 })
 
 
@@ -170,6 +172,8 @@ bot.on('/opciones', (msg) => {
 
 
 bot.on('/addToCart', (msg) => {
+    
+    const replyMarkupInline = bot.inlineKeyboard([[bot.inlineButton('CANCELAR', { callback: '/cancelarProd' })]]);
 
     translateMessage(msg, lang, `
     Ingresa los productos a agregar al carrito siguiendo el formato a continuación:
@@ -179,12 +183,15 @@ bot.on('/addToCart', (msg) => {
     Ejemplo: 1,2,5,3 (Añade 2 del ID 1 y 3 del ID 5)
 
     NOTA: Los productos ingresados tomarán en cuenta a los añadidos previamente: Si en el carrito tenías 1 producto ID 1 con el mensaje ejemplo pasarás a tener 3.
-    `, false, 'prod')
+    `, replyMarkupInline, 'prod')
+
 
 });
 
 
 bot.on('/modCart', (msg) => {
+
+    const replyMarkupInline = bot.inlineKeyboard([[bot.inlineButton('CANCELAR', { callback: '/cancelarProd' })]]);
 
     translateMessage(msg, lang, `
     Ingresa los productos a agregar al carrito siguiendo el formato a continuación:
@@ -194,7 +201,7 @@ bot.on('/modCart', (msg) => {
     Ejemplo: 1,2,5,3 (Añade 2 del ID 1 y 3 del ID 5)
 
     NOTA: Los productos ingresados sustituirán a los añadidos previamente: Si en el carrito tenías 1 producto ID 1 con el mensaje ejemplo pasarás a tener 2.
-    `, false, 'mod')
+    `, replyMarkupInline, 'mod')
 
 });
 
@@ -280,6 +287,8 @@ bot.on('ask.mod', (msg) => {
 
 bot.on('/registrar', (msg) => {
 
+    const replyMarkupInline = bot.inlineKeyboard([[bot.inlineButton('CANCELAR', { callback: '/cancelar' })]]);
+
      translateMessage(msg, lang, `
      Ingresa tus datos siguiendo el formato a continuación:
      Correo,Nombre,Apellido,Ciudad,Método de Pago
@@ -301,7 +310,7 @@ bot.on('/registrar', (msg) => {
      • Maracay
      
      NOTA: NO AÑADIR ESPACIOS ENTRE LOS CAMPOS 😜`,
-     false, 'datos')
+     replyMarkupInline, 'datos')
 
 })
 
@@ -312,10 +321,10 @@ bot.on('ask.datos', msg => {
         [BUTTONS.verCarrito.label, BUTTONS.añadirCarrito.label],
         [BUTTONS.close.label]
     ], { resize: true });
-
-    const replyMarkupInline = bot.inlineKeyboard([[bot.inlineButton('Enviar Factura', { callback: '/enviarFactura' })]]);
+    const replyMarkupI = bot.inlineKeyboard([[bot.inlineButton('Enviar Factura', { callback: '/enviarFactura' })]]);
     async function revisa() {
 
+        
         let datos = msg.text.split(',');
         if (datos.length < 5) {
             translateMessage(msg, lang, '😲 Oops!\nCampos invalidos. Por favor, intentalo nuevamente: ', false, 'datos');
@@ -331,7 +340,7 @@ bot.on('ask.datos', msg => {
 
                     await API_DATABASE.put(ENDPOINT_DATABASE.userData + `?id=${msg.from.id}&msg=${msg.text}`)
                     translateMessage(msg, lang, 'Sus datos han sido registrados satisfactoriamente ✅', replyMarkup)
-                    translateMessage(msg, lang, 'Presione el botón adjunto para enviar la factura', replyMarkupInline)
+                    translateMessage(msg, lang, 'Presione el botón adjunto para enviar la factura', replyMarkupI)
 
                 } catch (error) { log(error) }
 
@@ -397,7 +406,7 @@ bot.on('/verCarrito', (msg) => {
 bot.on('/factura', (msg) => {
 
     async function verify () {
-
+        try {
         let call = await API_DATABASE.get(ENDPOINT_DATABASE.showCart + `?id=${msg.from.id}` );
         let resultado = call.data;
 
@@ -407,6 +416,10 @@ bot.on('/factura', (msg) => {
             let replyMarkup = bot.keyboard([[BUTTONS.registrar.label]], { resize: true });
             translateMessage(msg, lang, 'Presione el botón y siga los pasos indicados: ', replyMarkup);
         }
+        } catch (error) {
+            log(error)
+        }
+        
 
     }
     
@@ -419,11 +432,8 @@ bot.on('/enviarFactura', (msg) => {
 
     async function enviar() {
         try {
-            let callTicket = await API_DATABASE.post(ENDPOINT_DATABASE.createTicket + `?id=${msg.from.id}`)
             let callMail = await API_DATABASE.post(ENDPOINT_DATABASE.sendMail + `?id=${msg.from.id}`)
-            bot.sendMessage(-699727829, callTicket.data)
-            let resultado=callMail.data;
-            translateMessage(msg, lang, resultado);
+            translateMessage(msg, lang, callMail.data);
         } catch (error) { log(error) }
     }
 
@@ -452,9 +462,23 @@ bot.on('/vaciarCarrito', (msg) => {
 
 
 
+bot.on('/cancelar', (msg) => {
 
+    let replyMarkup = bot.keyboard([
+        [BUTTONS.products.label, BUTTONS.carrito.label],
+        [BUTTONS.info.label, BUTTONS.opciones.label]
+    ], { resize: true });
 
+    
+   return translateMessage(msg, lang, 'Registro cancelado satisfactoriamente', replyMarkup);           
 
+})
+
+bot.on('/cancelarProd', (msg) => {
+
+     return translateMessage(msg, lang, 'Acción cancelada satisfactoriamente');        
+
+})
 
 
 
