@@ -84,6 +84,15 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/es)
 [![Telegram Bot API](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/bots/api)
 
+### Otros repositorios :paperclips:
+
+#### Telegram Bot:
+- https://github.com/VKneider/Chatbot-Project-g3
+
+#### Serverless functions:
+- https://github.com/sebastiaannavas/chatbot_project_g3_deploy
+- https://github.com/VKneider/chatbot_project_g3_deploy
+
 <p align="right"><a href="#top"> ^ Ir arriba </a></p>
 
 <!-- SETUP -->
